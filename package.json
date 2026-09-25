@@ -1,0 +1,21 @@
+{
+  "name": "mosque-management-system-mbj",
+  "version": "1.0.0",
+  "description": "Sistem Manajemen Masjid & DKM (SaaS-Ready White-Label CMS) - Masjid Mu'adz bin Jabal",
+  "main": "index.html",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "serve": "node server.js"
+  },
+  "keywords": [
+    "mosque-management",
+    "dkm",
+    "masjid",
+    "pos-kasir",
+    "google-apps-script",
+    "white-label-cms"
+  ],
+  "author": "DKM Mu'adz bin Jabal",
+  "license": "MIT"
+}
