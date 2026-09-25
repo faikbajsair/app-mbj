@@ -312,7 +312,9 @@ const App = {
   }
 };
 
-// Bootstrap application on DOM ready
-document.addEventListener("DOMContentLoaded", () => {
+// Bootstrap application on DOM ready or immediately if already parsed
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => App.init());
+} else {
   App.init();
-});
+}
