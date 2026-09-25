@@ -122,6 +122,12 @@ class StateStore {
     localStorage.setItem("mbj_auth_user", JSON.stringify(this.currentUser));
     this.emit("auth:change", this.currentUser);
     Utils.showToast(`Mode pengguna berganti ke role: ${role}`, "info");
+
+    if (role === "Public" && window.location.hash !== "#portal") {
+      window.location.hash = "#portal";
+    } else if (role !== "Public" && (window.location.hash === "#portal" || !window.location.hash)) {
+      window.location.hash = "#dashboard";
+    }
   }
 
   login(userObj) {

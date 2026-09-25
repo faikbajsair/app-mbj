@@ -42,7 +42,7 @@ const PortalComponent = {
         </div>
 
         <!-- 1. Transparansi Kas Keuangan Riil -->
-        <div class="space-y-4">
+        <div id="portal-kas" class="space-y-4 pt-2">
           <div class="flex items-center justify-between">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -76,7 +76,7 @@ const PortalComponent = {
         </div>
 
         <!-- 2. Jadwal Kajian Sunnah & Khutbah Jumat -->
-        <div class="space-y-4">
+        <div id="portal-agenda" class="space-y-4 pt-2">
           <div>
             <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <i data-lucide="calendar" class="w-5 h-5 text-emerald-600"></i>
@@ -124,7 +124,7 @@ const PortalComponent = {
         </div>
 
         <!-- 3. Form Permohonan Layanan Sosial Jamaah (Self-Service) -->
-        <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-lg">
+        <div id="portal-csr" class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-lg">
           <div class="max-w-2xl mb-6">
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-bold mb-2">
               <i data-lucide="heart" class="w-3.5 h-3.5"></i>
@@ -190,7 +190,7 @@ const PortalComponent = {
             </div>
 
             <!-- Bank Accounts (2 Cards) -->
-            <div class="md:col-span-2 space-y-4">
+            <div id="portal-bank" class="md:col-span-2 space-y-4">
               
               <!-- BSI -->
               <div class="p-5 rounded-2xl bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-950/30 dark:to-emerald-950/30 border border-teal-200 dark:border-teal-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
