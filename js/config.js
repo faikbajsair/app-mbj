@@ -19,7 +19,7 @@ const DEFAULT_CONFIG = {
   bank_bsi: "7123-4567-89 a.n Kas Masjid Muadz",
   bank_muamalat: "1020-3040-50 a.n Infaq Dakwah & ZISWAF MBJ",
   qris_image_url: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=INFAQ-MASJID-MUADZ-BIN-JABAL",
-  gas_web_app_url: "", // User can input their deployed Google Apps Script URL
+  gas_web_app_url: "https://script.google.com/macros/s/AKfycbwOw_X-7e7dC5_4-1MIK4wl6Cx9GtEKVR9yPxznQ-pEzP2kCQ3MH2jp7CLhzB0oIm9szQ/exec",
   sound_enabled: "true"
 };
 
