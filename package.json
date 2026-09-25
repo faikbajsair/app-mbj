@@ -4,6 +4,7 @@
   "description": "Sistem Manajemen Masjid & DKM (SaaS-Ready White-Label CMS) - Masjid Mu'adz bin Jabal",
   "main": "index.html",
   "scripts": {
+    "build": "node build.js",
     "dev": "node server.js",
     "start": "node server.js",
     "serve": "node server.js"
