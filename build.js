@@ -24,7 +24,7 @@ const jsFiles = [
 ];
 
 // 1. Compile JS Bundle
-let bundledJs = "/* Masjid MBJ Management System Unified Script */\n";
+let bundledJs = "/* Masjid MBJ Management System Unified Production Bundle */\n";
 jsFiles.forEach(file => {
   const p = path.join(__dirname, file);
   if (fs.existsSync(p)) {
@@ -32,17 +32,18 @@ jsFiles.forEach(file => {
   }
 });
 
-// Write to js/bundle.js
+// Write to js/bundle.js and root bundle.js
 if (!fs.existsSync(path.join(__dirname, 'js'))) {
   fs.mkdirSync(path.join(__dirname, 'js'), { recursive: true });
 }
 fs.writeFileSync(path.join(__dirname, 'js/bundle.js'), bundledJs, 'utf8');
+fs.writeFileSync(path.join(__dirname, 'bundle.js'), bundledJs, 'utf8');
 
 // 2. Read main.css
 const cssContent = fs.readFileSync(path.join(__dirname, 'css/main.css'), 'utf8');
 
-// 3. Build Self-Contained index.html (Zero-Network-Dependency JS/CSS)
-const indexTemplate = `<!DOCTYPE html>
+// 3. Template Definition with Safe Placeholders (Avoiding Template Literal Expansion)
+const htmlTemplate = `<!DOCTYPE html>
 <html lang="id" class="light">
 <head>
   <meta charset="UTF-8">
@@ -84,7 +85,7 @@ const indexTemplate = `<!DOCTYPE html>
 
   <!-- Embedded Custom Stylesheet -->
   <style>
-${cssContent}
+/* CSS_INLINE_INJECTION */
   </style>
 </head>
 <body class="bg-islamic-pattern min-h-screen text-slate-800 antialiased flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
@@ -137,20 +138,42 @@ ${cssContent}
   <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col items-end pointer-events-none [&>*]:pointer-events-auto"></div>
 
-  <!-- Self-Contained Application JavaScript -->
+  <!-- Standalone Application Unified Script -->
   <script>
-${bundledJs}
+/* JS_INLINE_INJECTION */
   </script>
 </body>
 </html>`;
 
-fs.writeFileSync(path.join(__dirname, 'index.html'), indexTemplate, 'utf8');
+// Safe replacement using replacer functions to avoid '$' interpretation
+const finalIndexHtml = htmlTemplate
+  .replace('/* CSS_INLINE_INJECTION */', () => cssContent)
+  .replace('/* JS_INLINE_INJECTION */', () => bundledJs);
 
-// 4. Create public/ directory structure for Vercel
+// Write to root index.html
+fs.writeFileSync(path.join(__dirname, 'index.html'), finalIndexHtml, 'utf8');
+
+// 4. Setup public/ directory with complete mirror for Vercel Static deployment
 const publicDir = path.join(__dirname, 'public');
-if (!fs.existsSync(publicDir)) {
-  fs.mkdirSync(publicDir, { recursive: true });
-}
-fs.writeFileSync(path.join(publicDir, 'index.html'), indexTemplate, 'utf8');
+const publicJsDir = path.join(publicDir, 'js');
+const publicCssDir = path.join(publicDir, 'css');
 
-console.log("✨ Build Complete! index.html is now self-contained, 100% resilient, and lightning fast.");
+if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+if (!fs.existsSync(publicJsDir)) fs.mkdirSync(publicJsDir, { recursive: true });
+if (!fs.existsSync(publicCssDir)) fs.mkdirSync(publicCssDir, { recursive: true });
+
+fs.writeFileSync(path.join(publicDir, 'index.html'), finalIndexHtml, 'utf8');
+fs.writeFileSync(path.join(publicDir, 'bundle.js'), bundledJs, 'utf8');
+fs.writeFileSync(path.join(publicJsDir, 'bundle.js'), bundledJs, 'utf8');
+fs.writeFileSync(path.join(publicCssDir, 'main.css'), cssContent, 'utf8');
+
+// Copy all individual js files to public/js for dev/debugging
+jsFiles.forEach(file => {
+  const src = path.join(__dirname, file);
+  const dest = path.join(publicDir, file);
+  const destDir = path.dirname(dest);
+  if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+  if (fs.existsSync(src)) fs.copyFileSync(src, dest);
+});
+
+console.log("✨ Build Complete! All targets (index.html, bundle.js, public/) compiled & synchronized.");
