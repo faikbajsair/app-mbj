@@ -9,36 +9,42 @@ const App = {
   activeModalTrxId: null,
 
   init: function() {
-    // 1. Initial State & Configuration
-    ConfigManager.applyTheme();
+    try {
+      // 1. Initial State & Configuration
+      ConfigManager.applyTheme();
 
-    // 2. Setup Hash Router
-    window.addEventListener("hashchange", () => {
-      this.handleRoute();
-    });
+      // 2. Setup Hash Router
+      window.addEventListener("hashchange", () => {
+        this.handleRoute();
+      });
 
-    // 3. Setup Global State Listeners
-    state.on("auth:change", () => {
+      // 3. Setup Global State Listeners
+      state.on("auth:change", () => {
+        this.renderNavbar();
+        this.renderSidebar();
+        this.handleRoute();
+      });
+
+      state.on("gas:status", () => {
+        this.renderNavbar();
+      });
+
+      // 4. Initial Render
       this.renderNavbar();
       this.renderSidebar();
       this.handleRoute();
-    });
 
-    state.on("gas:status", () => {
-      this.renderNavbar();
-    });
+      // 5. If GAS Web App URL is saved, attempt background sync
+      if (ApiService.isConfigured()) {
+        ApiService.syncFromGAS();
+      }
 
-    // 4. Initial Render
-    this.renderNavbar();
-    this.renderSidebar();
-    this.handleRoute();
-
-    // 5. If GAS Web App URL is saved, attempt background sync
-    if (ApiService.isConfigured()) {
-      ApiService.syncFromGAS();
+      console.log("🕌 Sistem Manajemen Masjid MBJ Siap Digunakan.");
+    } catch (e) {
+      console.error("App init error:", e);
+      // Fallback emergency render
+      this.renderView();
     }
-
-    console.log("🕌 Sistem Manajemen Masjid MBJ Siap Digunakan.");
   },
 
   handleRoute: function() {
@@ -51,20 +57,28 @@ const App = {
   },
 
   renderNavbar: function() {
-    const navEl = document.getElementById("navbar-container");
-    if (navEl) {
-      navEl.innerHTML = NavbarComponent.render();
-      NavbarComponent.initListeners();
-      this.reinitIcons();
+    try {
+      const navEl = document.getElementById("navbar-container");
+      if (navEl && typeof NavbarComponent !== "undefined") {
+        navEl.innerHTML = NavbarComponent.render();
+        NavbarComponent.initListeners();
+        this.reinitIcons();
+      }
+    } catch (e) {
+      console.warn("Navbar render error:", e);
     }
   },
 
   renderSidebar: function() {
-    const sideEl = document.getElementById("sidebar-container");
-    if (sideEl) {
-      sideEl.innerHTML = SidebarComponent.render();
-      SidebarComponent.initListeners();
-      this.reinitIcons();
+    try {
+      const sideEl = document.getElementById("sidebar-container");
+      if (sideEl && typeof SidebarComponent !== "undefined") {
+        sideEl.innerHTML = SidebarComponent.render();
+        SidebarComponent.initListeners();
+        this.reinitIcons();
+      }
+    } catch (e) {
+      console.warn("Sidebar render error:", e);
     }
   },
 
@@ -74,42 +88,53 @@ const App = {
 
     const route = state.activeRoute;
 
-    switch (route) {
-      case "dashboard":
-        mainEl.innerHTML = DashboardComponent.render();
-        setTimeout(() => DashboardComponent.initCharts(), 50);
-        break;
-      case "pos":
-        mainEl.innerHTML = PosComponent.render();
-        break;
-      case "transactions":
-        mainEl.innerHTML = TransactionsComponent.render();
-        break;
-      case "ubudiyah":
-        mainEl.innerHTML = UbudiyahComponent.render();
-        break;
-      case "multimedia":
-        mainEl.innerHTML = MultimediaComponent.render();
-        break;
-      case "facilities":
-        mainEl.innerHTML = FacilitiesComponent.render();
-        break;
-      case "social":
-        mainEl.innerHTML = SocialComponent.render();
-        break;
-      case "tpq":
-        mainEl.innerHTML = TpqComponent.render();
-        break;
-      case "portal":
-        mainEl.innerHTML = PortalComponent.render();
-        break;
-      case "settings":
-        mainEl.innerHTML = SettingsComponent.render();
-        break;
-      default:
-        mainEl.innerHTML = DashboardComponent.render();
-        setTimeout(() => DashboardComponent.initCharts(), 50);
-        break;
+    try {
+      switch (route) {
+        case "dashboard":
+          mainEl.innerHTML = DashboardComponent.render();
+          setTimeout(() => { try { DashboardComponent.initCharts(); } catch(e){} }, 50);
+          break;
+        case "pos":
+          mainEl.innerHTML = PosComponent.render();
+          break;
+        case "transactions":
+          mainEl.innerHTML = TransactionsComponent.render();
+          break;
+        case "ubudiyah":
+          mainEl.innerHTML = UbudiyahComponent.render();
+          break;
+        case "multimedia":
+          mainEl.innerHTML = MultimediaComponent.render();
+          break;
+        case "facilities":
+          mainEl.innerHTML = FacilitiesComponent.render();
+          break;
+        case "social":
+          mainEl.innerHTML = SocialComponent.render();
+          break;
+        case "tpq":
+          mainEl.innerHTML = TpqComponent.render();
+          break;
+        case "portal":
+          mainEl.innerHTML = PortalComponent.render();
+          break;
+        case "settings":
+          mainEl.innerHTML = SettingsComponent.render();
+          break;
+        default:
+          mainEl.innerHTML = DashboardComponent.render();
+          setTimeout(() => { try { DashboardComponent.initCharts(); } catch(e){} }, 50);
+          break;
+      }
+    } catch (err) {
+      console.error("View render error:", err);
+      mainEl.innerHTML = `
+        <div class="glass-card p-8 rounded-2xl text-center space-y-4 max-w-lg mx-auto mt-10">
+          <div class="text-rose-500 font-bold text-lg">Terjadi Kendala Memuat Tampilan</div>
+          <p class="text-xs text-slate-500">${err.message}</p>
+          <button onclick="window.location.hash='#dashboard'; location.reload();" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold">Kembali ke Dashboard</button>
+        </div>
+      `;
     }
 
     // Scroll to top on route change
@@ -118,8 +143,12 @@ const App = {
   },
 
   reinitIcons: function() {
-    if (typeof lucide !== "undefined" && lucide.createIcons) {
-      lucide.createIcons();
+    try {
+      if (typeof lucide !== "undefined" && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    } catch (e) {
+      // Lucide icon fallback
     }
   },
 
