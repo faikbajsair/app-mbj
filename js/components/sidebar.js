@@ -2,7 +2,7 @@
  * ==============================================================================
  * COMPONENT: SIDEBAR
  * Enterprise Role-Based Dynamic Navigation Menu with Categorized Sections,
- * Public Portal Quick-Jumps & Interactive Badges
+ * Public Portal Quick-Jumps, Toggle Drawer & Interactive Badges
  * ==============================================================================
  */
 
@@ -69,6 +69,10 @@ const SidebarComponent = {
       const el = document.getElementById(targetId);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    // Auto close sidebar on mobile
+    if (window.innerWidth < 1024) {
+      App.toggleSidebar(false);
+    }
   },
 
   render: function() {
@@ -77,20 +81,33 @@ const SidebarComponent = {
     const isPublic = currentUser.role === "Public";
     const finSummary = state.getFinancialSummary();
     const config = ConfigManager.getAll();
+    const isOpen = state.isSidebarOpen;
 
     return `
-      <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass-panel border-r border-slate-200/80 dark:border-slate-800/80 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between pt-16 sm:pt-18 pb-4">
+      <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass-panel border-r border-slate-200/80 dark:border-slate-800/80 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out flex flex-col justify-between pt-16 sm:pt-18 pb-4 shadow-xl">
         
+        <!-- Sidebar Header with Close Trigger -->
+        <div class="px-4 py-2.5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full ${isPublic ? 'bg-teal-500' : 'bg-emerald-500'} animate-pulse"></span>
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">
+              ${isPublic ? 'Portal Jamaah' : 'Panel Pengurus DKM'}
+            </span>
+          </div>
+          <button onclick="App.toggleSidebar(false)" class="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition cursor-pointer" title="Tutup Menu Sidebar">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
         <!-- Navigation Link Groups (Scrollable) -->
-        <div class="px-3 py-4 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
+        <div class="px-3 py-3 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
           
           ${isPublic ? `
             <!-- PUBLIC PORTAL NAVIGATION -->
             <div>
               <div class="px-3 pb-2 flex items-center justify-between">
-                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  PORTAL JAMAAH
+                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                  NAVIGASI CEPAT
                 </span>
                 <span class="text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full">
                   Publik
@@ -130,7 +147,7 @@ const SidebarComponent = {
               <p class="text-[11px] text-slate-300 leading-relaxed">
                 Kelola buku kas, POS kasir, jadwal khotib, dan divisi masjid.
               </p>
-              <button onclick="state.setRole('SuperAdmin'); window.location.hash='#dashboard';" class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+              <button onclick="state.setRole('SuperAdmin'); window.location.hash='#dashboard';" class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer">
                 <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
                 <span>Masuk Dashboard DKM</span>
               </button>
@@ -193,7 +210,7 @@ const SidebarComponent = {
                 <span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
                 <span class="font-medium text-slate-700 dark:text-slate-300 truncate">${currentUser.username} (${currentUser.role})</span>
               </div>
-              <button onclick="state.logout()" title="Keluar ke Portal Jamaah" class="p-1 hover:text-rose-600 transition">
+              <button onclick="state.logout()" title="Keluar ke Portal Jamaah" class="p-1 hover:text-rose-600 transition cursor-pointer">
                 <i data-lucide="log-out" class="w-4 h-4"></i>
               </button>
             </div>
@@ -214,36 +231,18 @@ const SidebarComponent = {
       </aside>
 
       <!-- Mobile Backdrop Overlay -->
-      <div id="sidebar-backdrop" class="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm hidden lg:hidden transition-opacity"></div>
+      <div id="sidebar-backdrop" onclick="App.toggleSidebar(false)" class="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm ${isOpen && (typeof window !== 'undefined' && window.innerWidth < 1024) ? '' : 'hidden'} lg:hidden transition-opacity cursor-pointer"></div>
     `;
   },
 
   initListeners: function() {
-    const toggleBtn = document.getElementById("btn-toggle-sidebar");
     const sidebar = document.getElementById("app-sidebar");
-    const backdrop = document.getElementById("sidebar-backdrop");
-
-    if (toggleBtn && sidebar && backdrop) {
-      const toggle = () => {
-        const isOpen = !sidebar.classList.contains("-translate-x-full");
-        if (isOpen) {
-          sidebar.classList.add("-translate-x-full");
-          backdrop.classList.add("hidden");
-        } else {
-          sidebar.classList.remove("-translate-x-full");
-          backdrop.classList.remove("hidden");
-        }
-      };
-
-      toggleBtn.addEventListener("click", toggle);
-      backdrop.addEventListener("click", toggle);
-
+    if (sidebar) {
       // Auto close on navigation in mobile
       sidebar.querySelectorAll("a").forEach(link => {
         link.addEventListener("click", () => {
           if (window.innerWidth < 1024) {
-            sidebar.classList.add("-translate-x-full");
-            backdrop.classList.add("hidden");
+            App.toggleSidebar(false);
           }
         });
       });

@@ -442,6 +442,7 @@ class StateStore {
     this.activeRoute = window.location.hash ? window.location.hash.replace("#", "") : "dashboard";
     this.gasConnected = false;
     this.isSyncing = false;
+    this.isSidebarOpen = typeof window !== "undefined" ? (window.innerWidth >= 1024) : true;
 
     // Load persisted state or initialize with seed data
     this.data = {
@@ -793,10 +794,10 @@ const NavbarComponent = {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16 sm:h-18">
             
-            <!-- Left: Mobile Menu Trigger + Brand Logo & Title -->
+            <!-- Left: Sidebar Toggle Trigger + Brand Logo & Title -->
             <div class="flex items-center gap-3">
-              <button id="btn-toggle-sidebar" class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition">
-                <i data-lucide="menu" class="w-6 h-6"></i>
+              <button id="btn-toggle-sidebar" onclick="App.toggleSidebar()" class="p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 focus:outline-none transition flex items-center justify-center cursor-pointer shadow-sm" title="Buka / Tutup Sidebar">
+                <i data-lucide="menu" class="w-5 h-5"></i>
               </button>
 
               <div class="flex items-center gap-3 cursor-pointer select-none" onclick="window.location.hash='#dashboard'">
@@ -911,7 +912,7 @@ const NavbarComponent = {
  * ==============================================================================
  * COMPONENT: SIDEBAR
  * Enterprise Role-Based Dynamic Navigation Menu with Categorized Sections,
- * Public Portal Quick-Jumps & Interactive Badges
+ * Public Portal Quick-Jumps, Toggle Drawer & Interactive Badges
  * ==============================================================================
  */
 
@@ -978,6 +979,10 @@ const SidebarComponent = {
       const el = document.getElementById(targetId);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    // Auto close sidebar on mobile
+    if (window.innerWidth < 1024) {
+      App.toggleSidebar(false);
+    }
   },
 
   render: function() {
@@ -986,20 +991,33 @@ const SidebarComponent = {
     const isPublic = currentUser.role === "Public";
     const finSummary = state.getFinancialSummary();
     const config = ConfigManager.getAll();
+    const isOpen = state.isSidebarOpen;
 
     return `
-      <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass-panel border-r border-slate-200/80 dark:border-slate-800/80 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between pt-16 sm:pt-18 pb-4">
+      <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass-panel border-r border-slate-200/80 dark:border-slate-800/80 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out flex flex-col justify-between pt-16 sm:pt-18 pb-4 shadow-xl">
         
+        <!-- Sidebar Header with Close Trigger -->
+        <div class="px-4 py-2.5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full ${isPublic ? 'bg-teal-500' : 'bg-emerald-500'} animate-pulse"></span>
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">
+              ${isPublic ? 'Portal Jamaah' : 'Panel Pengurus DKM'}
+            </span>
+          </div>
+          <button onclick="App.toggleSidebar(false)" class="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition cursor-pointer" title="Tutup Menu Sidebar">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
         <!-- Navigation Link Groups (Scrollable) -->
-        <div class="px-3 py-4 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
+        <div class="px-3 py-3 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
           
           ${isPublic ? `
             <!-- PUBLIC PORTAL NAVIGATION -->
             <div>
               <div class="px-3 pb-2 flex items-center justify-between">
-                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  PORTAL JAMAAH
+                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                  NAVIGASI CEPAT
                 </span>
                 <span class="text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full">
                   Publik
@@ -1039,7 +1057,7 @@ const SidebarComponent = {
               <p class="text-[11px] text-slate-300 leading-relaxed">
                 Kelola buku kas, POS kasir, jadwal khotib, dan divisi masjid.
               </p>
-              <button onclick="state.setRole('SuperAdmin'); window.location.hash='#dashboard';" class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5">
+              <button onclick="state.setRole('SuperAdmin'); window.location.hash='#dashboard';" class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer">
                 <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
                 <span>Masuk Dashboard DKM</span>
               </button>
@@ -1102,7 +1120,7 @@ const SidebarComponent = {
                 <span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
                 <span class="font-medium text-slate-700 dark:text-slate-300 truncate">${currentUser.username} (${currentUser.role})</span>
               </div>
-              <button onclick="state.logout()" title="Keluar ke Portal Jamaah" class="p-1 hover:text-rose-600 transition">
+              <button onclick="state.logout()" title="Keluar ke Portal Jamaah" class="p-1 hover:text-rose-600 transition cursor-pointer">
                 <i data-lucide="log-out" class="w-4 h-4"></i>
               </button>
             </div>
@@ -1123,36 +1141,18 @@ const SidebarComponent = {
       </aside>
 
       <!-- Mobile Backdrop Overlay -->
-      <div id="sidebar-backdrop" class="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm hidden lg:hidden transition-opacity"></div>
+      <div id="sidebar-backdrop" onclick="App.toggleSidebar(false)" class="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm ${isOpen && (typeof window !== 'undefined' && window.innerWidth < 1024) ? '' : 'hidden'} lg:hidden transition-opacity cursor-pointer"></div>
     `;
   },
 
   initListeners: function() {
-    const toggleBtn = document.getElementById("btn-toggle-sidebar");
     const sidebar = document.getElementById("app-sidebar");
-    const backdrop = document.getElementById("sidebar-backdrop");
-
-    if (toggleBtn && sidebar && backdrop) {
-      const toggle = () => {
-        const isOpen = !sidebar.classList.contains("-translate-x-full");
-        if (isOpen) {
-          sidebar.classList.add("-translate-x-full");
-          backdrop.classList.add("hidden");
-        } else {
-          sidebar.classList.remove("-translate-x-full");
-          backdrop.classList.remove("hidden");
-        }
-      };
-
-      toggleBtn.addEventListener("click", toggle);
-      backdrop.addEventListener("click", toggle);
-
+    if (sidebar) {
       // Auto close on navigation in mobile
       sidebar.querySelectorAll("a").forEach(link => {
         link.addEventListener("click", () => {
           if (window.innerWidth < 1024) {
-            sidebar.classList.add("-translate-x-full");
-            backdrop.classList.add("hidden");
+            App.toggleSidebar(false);
           }
         });
       });
@@ -2662,14 +2662,14 @@ const FacilitiesComponent = {
             </div>
             <div>
               <h2 class="text-lg font-bold text-slate-900 dark:text-white">Divisi Fasilitas, Sanitasi & Rumah Tangga</h2>
-              <p class="text-xs text-slate-500">Jadwal tugas marbot, stok karbol lantai 1-2 & tiket perbaikan gedung MBJ</p>
+              <p class="text-xs text-slate-500">Jadwal tugas marbot, pengajuan kebutuhan sarana & tiket perbaikan gedung MBJ</p>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
             <button onclick="FacilitiesComponent.openAddTicketModal('Kebersihan')" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-md transition">
-              <i data-lucide="spray-can" class="w-4 h-4"></i>
-              <span>Pengajuan Stok Karbol</span>
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Pengajuan Kebutuhan</span>
             </button>
             <button onclick="FacilitiesComponent.openAddTicketModal('Fisik')" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md transition">
               <i data-lucide="wrench" class="w-4 h-4"></i>
@@ -2793,7 +2793,7 @@ const FacilitiesComponent = {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">Buat Tiket Perawatan / Pengajuan Stok</h3>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Buat Tiket Perawatan / Pengajuan Kebutuhan</h3>
             <button onclick="document.getElementById('modal-facilities-container').innerHTML=''" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
           </div>
 
@@ -2819,8 +2819,8 @@ const FacilitiesComponent = {
             </div>
 
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Nama Barang / Uraian Pekerjaan</label>
-              <input type="text" id="tck-item" required placeholder="Contoh: Karbol Pinus 4 Galon / Servis AC Daikin" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white dark:bg-slate-800">
+              <label class="block font-semibold text-slate-600 mb-1">Nama Barang / Uraian Kebutuhan</label>
+              <input type="text" id="tck-item" required placeholder="Contoh: Pengadaan Karbol / Lampu LED / Servis AC" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white dark:bg-slate-800">
             </div>
 
             <div class="grid grid-cols-2 gap-2">
@@ -3634,7 +3634,7 @@ const PortalComponent = {
                 <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
                   <span class="text-slate-500">Fasilitas: Parkir Luas, AC, Konsumsi</span>
                   <a href="https://youtube.com" target="_blank" class="font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1">
-                    <i data-lucide="youtube" class="w-4 h-4"></i>
+                    <i data-lucide="play-circle" class="w-4 h-4"></i>
                     <span>Live YouTube</span>
                   </a>
                 </div>
@@ -4179,6 +4179,51 @@ const App = {
     } catch (e) {
       console.warn("Sidebar render error:", e);
     }
+  },
+
+  toggleSidebar: function(forceState) {
+    const sidebar = document.getElementById("app-sidebar");
+    const backdrop = document.getElementById("sidebar-backdrop");
+    const mainContent = document.getElementById("app-main-content");
+    const footer = document.getElementById("app-footer");
+
+    if (!sidebar) return;
+
+    const isCurrentlyClosed = sidebar.classList.contains("-translate-x-full");
+    const willOpen = typeof forceState === "boolean" ? forceState : isCurrentlyClosed;
+
+    state.isSidebarOpen = willOpen;
+
+    if (willOpen) {
+      sidebar.classList.remove("-translate-x-full");
+      sidebar.classList.add("translate-x-0");
+      if (backdrop && window.innerWidth < 1024) {
+        backdrop.classList.remove("hidden");
+      }
+      if (mainContent) {
+        mainContent.classList.remove("lg:pl-0");
+        mainContent.classList.add("lg:pl-64");
+      }
+      if (footer) {
+        footer.classList.remove("lg:pl-0");
+        footer.classList.add("lg:pl-64");
+      }
+    } else {
+      sidebar.classList.remove("translate-x-0");
+      sidebar.classList.add("-translate-x-full");
+      if (backdrop) {
+        backdrop.classList.add("hidden");
+      }
+      if (mainContent) {
+        mainContent.classList.remove("lg:pl-64");
+        mainContent.classList.add("lg:pl-0");
+      }
+      if (footer) {
+        footer.classList.remove("lg:pl-64");
+        footer.classList.add("lg:pl-0");
+      }
+    }
+    this.reinitIcons();
   },
 
   renderView: function() {

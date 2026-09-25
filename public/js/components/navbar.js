@@ -33,10 +33,10 @@ const NavbarComponent = {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16 sm:h-18">
             
-            <!-- Left: Mobile Menu Trigger + Brand Logo & Title -->
+            <!-- Left: Sidebar Toggle Trigger + Brand Logo & Title -->
             <div class="flex items-center gap-3">
-              <button id="btn-toggle-sidebar" class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition">
-                <i data-lucide="menu" class="w-6 h-6"></i>
+              <button id="btn-toggle-sidebar" onclick="App.toggleSidebar()" class="p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 focus:outline-none transition flex items-center justify-center cursor-pointer shadow-sm" title="Buka / Tutup Sidebar">
+                <i data-lucide="menu" class="w-5 h-5"></i>
               </button>
 
               <div class="flex items-center gap-3 cursor-pointer select-none" onclick="window.location.hash='#dashboard'">

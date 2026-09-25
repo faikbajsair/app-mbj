@@ -100,7 +100,7 @@ const htmlTemplate = `<!DOCTYPE html>
     <div id="sidebar-container"></div>
 
     <!-- Main Dynamic Application View -->
-    <main class="flex-1 lg:pl-64 w-full min-w-0 transition-all duration-200">
+    <main id="app-main-content" class="flex-1 lg:pl-64 w-full min-w-0 transition-all duration-300">
       <div id="main-content-view" class="w-full">
         <div class="flex items-center justify-center min-h-[60vh]">
           <div class="text-center space-y-3">
@@ -114,7 +114,7 @@ const htmlTemplate = `<!DOCTYPE html>
   </div>
 
   <!-- Global Footer -->
-  <footer class="lg:pl-64 py-6 border-t border-slate-200/60 text-center text-xs text-slate-400 bg-white/40 backdrop-blur-sm">
+  <footer id="app-footer" class="lg:pl-64 py-6 border-t border-slate-200/60 text-center text-xs text-slate-400 bg-white/40 backdrop-blur-sm transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
       <div>
         <span class="font-bold text-slate-600">Sistem Manajemen Masjid Mu'adz bin Jabal (MBJ)</span> &copy; 2026 • SaaS-Ready DKM Engine

@@ -82,6 +82,51 @@ const App = {
     }
   },
 
+  toggleSidebar: function(forceState) {
+    const sidebar = document.getElementById("app-sidebar");
+    const backdrop = document.getElementById("sidebar-backdrop");
+    const mainContent = document.getElementById("app-main-content");
+    const footer = document.getElementById("app-footer");
+
+    if (!sidebar) return;
+
+    const isCurrentlyClosed = sidebar.classList.contains("-translate-x-full");
+    const willOpen = typeof forceState === "boolean" ? forceState : isCurrentlyClosed;
+
+    state.isSidebarOpen = willOpen;
+
+    if (willOpen) {
+      sidebar.classList.remove("-translate-x-full");
+      sidebar.classList.add("translate-x-0");
+      if (backdrop && window.innerWidth < 1024) {
+        backdrop.classList.remove("hidden");
+      }
+      if (mainContent) {
+        mainContent.classList.remove("lg:pl-0");
+        mainContent.classList.add("lg:pl-64");
+      }
+      if (footer) {
+        footer.classList.remove("lg:pl-0");
+        footer.classList.add("lg:pl-64");
+      }
+    } else {
+      sidebar.classList.remove("translate-x-0");
+      sidebar.classList.add("-translate-x-full");
+      if (backdrop) {
+        backdrop.classList.add("hidden");
+      }
+      if (mainContent) {
+        mainContent.classList.remove("lg:pl-64");
+        mainContent.classList.add("lg:pl-0");
+      }
+      if (footer) {
+        footer.classList.remove("lg:pl-64");
+        footer.classList.add("lg:pl-0");
+      }
+    }
+    this.reinitIcons();
+  },
+
   renderView: function() {
     const mainEl = document.getElementById("main-content-view");
     if (!mainEl) return;

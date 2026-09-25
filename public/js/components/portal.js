@@ -114,7 +114,7 @@ const PortalComponent = {
                 <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
                   <span class="text-slate-500">Fasilitas: Parkir Luas, AC, Konsumsi</span>
                   <a href="https://youtube.com" target="_blank" class="font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1">
-                    <i data-lucide="youtube" class="w-4 h-4"></i>
+                    <i data-lucide="play-circle" class="w-4 h-4"></i>
                     <span>Live YouTube</span>
                   </a>
                 </div>

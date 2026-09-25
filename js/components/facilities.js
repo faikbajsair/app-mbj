@@ -26,14 +26,14 @@ const FacilitiesComponent = {
             </div>
             <div>
               <h2 class="text-lg font-bold text-slate-900 dark:text-white">Divisi Fasilitas, Sanitasi & Rumah Tangga</h2>
-              <p class="text-xs text-slate-500">Jadwal tugas marbot, stok karbol lantai 1-2 & tiket perbaikan gedung MBJ</p>
+              <p class="text-xs text-slate-500">Jadwal tugas marbot, pengajuan kebutuhan sarana & tiket perbaikan gedung MBJ</p>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
             <button onclick="FacilitiesComponent.openAddTicketModal('Kebersihan')" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-md transition">
-              <i data-lucide="spray-can" class="w-4 h-4"></i>
-              <span>Pengajuan Stok Karbol</span>
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Pengajuan Kebutuhan</span>
             </button>
             <button onclick="FacilitiesComponent.openAddTicketModal('Fisik')" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-md transition">
               <i data-lucide="wrench" class="w-4 h-4"></i>
@@ -157,7 +157,7 @@ const FacilitiesComponent = {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h3 class="font-bold text-base text-slate-900 dark:text-white">Buat Tiket Perawatan / Pengajuan Stok</h3>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Buat Tiket Perawatan / Pengajuan Kebutuhan</h3>
             <button onclick="document.getElementById('modal-facilities-container').innerHTML=''" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
           </div>
 
@@ -183,8 +183,8 @@ const FacilitiesComponent = {
             </div>
 
             <div>
-              <label class="block font-semibold text-slate-600 mb-1">Nama Barang / Uraian Pekerjaan</label>
-              <input type="text" id="tck-item" required placeholder="Contoh: Karbol Pinus 4 Galon / Servis AC Daikin" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white dark:bg-slate-800">
+              <label class="block font-semibold text-slate-600 mb-1">Nama Barang / Uraian Kebutuhan</label>
+              <input type="text" id="tck-item" required placeholder="Contoh: Pengadaan Karbol / Lampu LED / Servis AC" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white dark:bg-slate-800">
             </div>
 
             <div class="grid grid-cols-2 gap-2">

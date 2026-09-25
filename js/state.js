@@ -67,6 +67,7 @@ class StateStore {
     this.activeRoute = window.location.hash ? window.location.hash.replace("#", "") : "dashboard";
     this.gasConnected = false;
     this.isSyncing = false;
+    this.isSidebarOpen = typeof window !== "undefined" ? (window.innerWidth >= 1024) : true;
 
     // Load persisted state or initialize with seed data
     this.data = {
