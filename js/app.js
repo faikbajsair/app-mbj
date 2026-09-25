@@ -22,6 +22,7 @@ const App = {
       state.on("auth:change", () => {
         this.renderNavbar();
         this.renderSidebar();
+        this.renderBottomNav();
         this.handleRoute();
       });
 
@@ -32,6 +33,7 @@ const App = {
       // 4. Initial Render
       this.renderNavbar();
       this.renderSidebar();
+      this.renderBottomNav();
       this.handleRoute();
 
       // 5. If GAS Web App URL is saved, attempt background sync
@@ -53,6 +55,7 @@ const App = {
 
     state.activeRoute = route;
     this.renderSidebar();
+    this.renderBottomNav();
     this.renderView();
   },
 
@@ -79,6 +82,19 @@ const App = {
       }
     } catch (e) {
       console.warn("Sidebar render error:", e);
+    }
+  },
+
+  renderBottomNav: function() {
+    try {
+      const bottomEl = document.getElementById("bottomnav-container");
+      if (bottomEl && typeof BottomNavComponent !== "undefined") {
+        bottomEl.innerHTML = BottomNavComponent.render();
+        BottomNavComponent.initListeners();
+        this.reinitIcons();
+      }
+    } catch (e) {
+      console.warn("BottomNav render error:", e);
     }
   },
 

@@ -39,11 +39,14 @@ const NavbarComponent = {
                 <i data-lucide="menu" class="w-5 h-5"></i>
               </button>
 
-              <div class="flex items-center gap-3 cursor-pointer select-none" onclick="window.location.hash='#dashboard'">
-                <img src="${config.logo_url}" alt="Logo Masjid" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-emerald-500/30 shadow-md bg-white p-0.5" onerror="this.src='https://ui-avatars.com/api/?name=MBJ&background=059669&color=fff'">
-                <div class="hidden sm:block">
-                  <div class="font-bold text-base sm:text-lg text-slate-900 dark:text-white leading-tight tracking-tight">${config.mosque_name}</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-xs">${config.mosque_tagline}</div>
+              <div class="flex items-center gap-2.5 cursor-pointer select-none" onclick="window.location.hash='#dashboard'">
+                <img src="${config.logo_url}" alt="Logo Masjid" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-emerald-500/30 shadow-md bg-white p-0.5" onerror="this.src='https://ui-avatars.com/api/?name=MBJ&background=059669&color=fff'">
+                <div>
+                  <div class="font-bold text-sm sm:text-lg text-slate-900 dark:text-white leading-tight tracking-tight">
+                    <span class="sm:hidden">Masjid MBJ</span>
+                    <span class="hidden sm:inline">${config.mosque_name}</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-xs hidden sm:block">${config.mosque_tagline}</div>
                 </div>
               </div>
             </div>
@@ -59,11 +62,11 @@ const NavbarComponent = {
             </div>
 
             <!-- Right Controls: Quick Actions, Role Switcher, Sound & Profile -->
-            <div class="flex items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-1.5 sm:gap-3">
               
               <!-- GAS Connection Status Indicator -->
               <div class="flex items-center">
-                <button id="btn-sync-gas" title="Sinkronisasi Data dengan Google Sheets" class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                <button id="btn-sync-gas" title="Sinkronisasi Data dengan Google Sheets" class="flex items-center gap-1 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
                   <span class="w-2 h-2 rounded-full ${ApiService.isConfigured() ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}"></span>
                   <span class="hidden xl:inline text-slate-600 dark:text-slate-300 font-medium">${ApiService.isConfigured() ? 'Sheets Sync' : 'Offline / Demo'}</span>
                   <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-slate-400 ${state.isSyncing ? 'animate-spin' : ''}"></i>
@@ -71,18 +74,18 @@ const NavbarComponent = {
               </div>
 
               <!-- Public Portal Quick Link -->
-              <button onclick="window.location.hash='#portal'" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Lihat Portal Publik Jamaah">
+              <button onclick="window.location.hash='#portal'" class="hidden sm:flex p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Lihat Portal Publik Jamaah">
                 <i data-lucide="globe" class="w-5 h-5 text-emerald-600"></i>
               </button>
 
               <!-- Sound Toggle -->
-              <button id="btn-toggle-sound" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Suara Notifikasi & Kasir">
+              <button id="btn-toggle-sound" class="hidden sm:flex p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Suara Notifikasi & Kasir">
                 <i data-lucide="${ConfigManager.get('sound_enabled') === 'false' ? 'volume-x' : 'volume-2'}" class="w-5 h-5 text-slate-500"></i>
               </button>
 
               <!-- Role Switcher Quick Dropdown -->
               <div class="relative">
-                <select id="select-active-role" class="text-xs bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-semibold py-1.5 px-3 rounded-xl border border-emerald-200 dark:border-emerald-800/60 focus:outline-none cursor-pointer">
+                <select id="select-active-role" class="text-xs bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold py-1.5 px-2 sm:px-3 rounded-xl border border-emerald-200 dark:border-emerald-800/60 focus:outline-none cursor-pointer max-w-[125px] sm:max-w-none truncate">
                   <option value="SuperAdmin" ${currentUser.role === 'SuperAdmin' ? 'selected' : ''}>👑 Super Admin</option>
                   <option value="Bendahara" ${currentUser.role === 'Bendahara' ? 'selected' : ''}>💰 Bendahara</option>
                   <option value="Marbot" ${currentUser.role === 'Marbot' ? 'selected' : ''}>🧹 Marbot & RT</option>

@@ -10,6 +10,7 @@ const jsFiles = [
   'js/api.js',
   'js/components/navbar.js',
   'js/components/sidebar.js',
+  'js/components/bottomnav.js',
   'js/components/dashboard.js',
   'js/components/pos.js',
   'js/components/transactions.js',
@@ -47,11 +48,18 @@ const htmlTemplate = `<!DOCTYPE html>
 <html lang="id" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Masjid Mu'adz bin Jabal - Sistem Manajemen DKM & Layanan Umat</title>
   
   <meta name="description" content="Sistem Informasi & Manajemen Terpadu Masjid Mu'adz bin Jabal (MBJ). Smart POS Kasir Keuangan, Divisi Ubudiyah & Khotib, Multimedia, Fasilitas Marbot, Layanan Sosial CSR, dan TPQ.">
   <meta name="keywords" content="masjid, muadz bin jabal, dkm, manajemen masjid, pos kasir masjid, infaq qris, jadwal kajian">
+  
+  <!-- Mobile & PWA Optimization -->
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Masjid MBJ">
+  <meta name="mobile-web-app-capable" content="yes">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://yt3.googleusercontent.com/ytc/AIdro_nzf7bsONYGX6eeNc-v6GMQUko-_BZXFExEZ_bPNxMbfw=s160-c-k-c0x00ffffff-no-rj">
@@ -135,8 +143,11 @@ const htmlTemplate = `<!DOCTYPE html>
   <!-- Global Modal Viewport -->
   <div id="modal-global-container"></div>
 
+  <!-- Mobile Bottom Navigation Bar Container -->
+  <div id="bottomnav-container"></div>
+
   <!-- Toast Notification Container -->
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col items-end pointer-events-none [&>*]:pointer-events-auto"></div>
+  <div id="toast-container" class="fixed bottom-16 sm:bottom-5 right-5 z-50 flex flex-col items-end pointer-events-none [&>*]:pointer-events-auto"></div>
 
   <!-- Standalone Application Unified Script -->
   <script>

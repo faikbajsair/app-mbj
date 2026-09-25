@@ -800,11 +800,14 @@ const NavbarComponent = {
                 <i data-lucide="menu" class="w-5 h-5"></i>
               </button>
 
-              <div class="flex items-center gap-3 cursor-pointer select-none" onclick="window.location.hash='#dashboard'">
-                <img src="${config.logo_url}" alt="Logo Masjid" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-emerald-500/30 shadow-md bg-white p-0.5" onerror="this.src='https://ui-avatars.com/api/?name=MBJ&background=059669&color=fff'">
-                <div class="hidden sm:block">
-                  <div class="font-bold text-base sm:text-lg text-slate-900 dark:text-white leading-tight tracking-tight">${config.mosque_name}</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-xs">${config.mosque_tagline}</div>
+              <div class="flex items-center gap-2.5 cursor-pointer select-none" onclick="window.location.hash='#dashboard'">
+                <img src="${config.logo_url}" alt="Logo Masjid" class="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-emerald-500/30 shadow-md bg-white p-0.5" onerror="this.src='https://ui-avatars.com/api/?name=MBJ&background=059669&color=fff'">
+                <div>
+                  <div class="font-bold text-sm sm:text-lg text-slate-900 dark:text-white leading-tight tracking-tight">
+                    <span class="sm:hidden">Masjid MBJ</span>
+                    <span class="hidden sm:inline">${config.mosque_name}</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-xs hidden sm:block">${config.mosque_tagline}</div>
                 </div>
               </div>
             </div>
@@ -820,11 +823,11 @@ const NavbarComponent = {
             </div>
 
             <!-- Right Controls: Quick Actions, Role Switcher, Sound & Profile -->
-            <div class="flex items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-1.5 sm:gap-3">
               
               <!-- GAS Connection Status Indicator -->
               <div class="flex items-center">
-                <button id="btn-sync-gas" title="Sinkronisasi Data dengan Google Sheets" class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                <button id="btn-sync-gas" title="Sinkronisasi Data dengan Google Sheets" class="flex items-center gap-1 text-xs px-2 sm:px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
                   <span class="w-2 h-2 rounded-full ${ApiService.isConfigured() ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}"></span>
                   <span class="hidden xl:inline text-slate-600 dark:text-slate-300 font-medium">${ApiService.isConfigured() ? 'Sheets Sync' : 'Offline / Demo'}</span>
                   <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-slate-400 ${state.isSyncing ? 'animate-spin' : ''}"></i>
@@ -832,18 +835,18 @@ const NavbarComponent = {
               </div>
 
               <!-- Public Portal Quick Link -->
-              <button onclick="window.location.hash='#portal'" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Lihat Portal Publik Jamaah">
+              <button onclick="window.location.hash='#portal'" class="hidden sm:flex p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Lihat Portal Publik Jamaah">
                 <i data-lucide="globe" class="w-5 h-5 text-emerald-600"></i>
               </button>
 
               <!-- Sound Toggle -->
-              <button id="btn-toggle-sound" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Suara Notifikasi & Kasir">
+              <button id="btn-toggle-sound" class="hidden sm:flex p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Toggle Suara Notifikasi & Kasir">
                 <i data-lucide="${ConfigManager.get('sound_enabled') === 'false' ? 'volume-x' : 'volume-2'}" class="w-5 h-5 text-slate-500"></i>
               </button>
 
               <!-- Role Switcher Quick Dropdown -->
               <div class="relative">
-                <select id="select-active-role" class="text-xs bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-semibold py-1.5 px-3 rounded-xl border border-emerald-200 dark:border-emerald-800/60 focus:outline-none cursor-pointer">
+                <select id="select-active-role" class="text-xs bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold py-1.5 px-2 sm:px-3 rounded-xl border border-emerald-200 dark:border-emerald-800/60 focus:outline-none cursor-pointer max-w-[125px] sm:max-w-none truncate">
                   <option value="SuperAdmin" ${currentUser.role === 'SuperAdmin' ? 'selected' : ''}>👑 Super Admin</option>
                   <option value="Bendahara" ${currentUser.role === 'Bendahara' ? 'selected' : ''}>💰 Bendahara</option>
                   <option value="Marbot" ${currentUser.role === 'Marbot' ? 'selected' : ''}>🧹 Marbot & RT</option>
@@ -1156,6 +1159,102 @@ const SidebarComponent = {
           }
         });
       });
+    }
+  }
+};
+
+
+/* === js/components/bottomnav.js === */
+/**
+ * ==============================================================================
+ * COMPONENT: BOTTOM NAVIGATION (MOBILE APP BAR)
+ * Native Android & iOS Navigation Bar with Role-Adaptive Quick Actions
+ * ==============================================================================
+ */
+
+const BottomNavComponent = {
+  render: function() {
+    const currentUser = state.currentUser;
+    const currentRoute = state.activeRoute;
+    const isPublic = currentUser.role === "Public";
+
+    // Navigation items for DKM Roles
+    const dkmItems = [
+      { id: "dashboard", label: "Ringkasan", icon: "layout-dashboard", isAction: false },
+      { id: "pos", label: "POS Kasir", icon: "calculator", isAction: false, isHero: true },
+      { id: "transactions", label: "Buku Kas", icon: "receipt", isAction: false },
+      { id: "ubudiyah", label: "Ubudiyah", icon: "calendar-days", isAction: false },
+      { id: "open_sidebar", label: "Menu", icon: "menu", isAction: true }
+    ];
+
+    // Navigation items for Jamaah / Public Mode
+    const publicItems = [
+      { id: "portal", label: "Portal", icon: "globe", isAnchor: false },
+      { id: "portal-kas", label: "Kas Riil", icon: "shield-check", isAnchor: true },
+      { id: "portal-agenda", label: "Kajian", icon: "calendar", isAnchor: true },
+      { id: "portal-csr", label: "Ambulans", icon: "heart-handshake", isAnchor: true },
+      { id: "digital-infaq-section", label: "Infaq QRIS", icon: "qr-code", isAnchor: true, isHero: true }
+    ];
+
+    const items = isPublic ? publicItems : dkmItems;
+
+    return `
+      <nav id="app-bottom-nav" class="lg:hidden mobile-bottom-bar flex items-center justify-around px-2 py-1.5 shadow-2xl">
+        ${items.map(item => {
+          if (item.isAction) {
+            return `
+              <button onclick="App.toggleSidebar()" class="touch-press flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-emerald-600 transition min-w-[56px]" title="Buka Semua Menu">
+                <i data-lucide="${item.icon}" class="w-5 h-5 mb-0.5 text-slate-600 dark:text-slate-300"></i>
+                <span class="text-[10px] font-semibold tracking-tight">${item.label}</span>
+              </button>
+            `;
+          }
+
+          if (item.isAnchor) {
+            return `
+              <button onclick="SidebarComponent.scrollToSection('${item.id}')" class="touch-press flex flex-col items-center justify-center py-1 px-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-emerald-600 transition min-w-[56px]">
+                ${item.isHero ? `
+                  <div class="w-10 h-10 -mt-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/40 ring-4 ring-white dark:ring-slate-900 border border-amber-300">
+                    <i data-lucide="${item.icon}" class="w-5 h-5"></i>
+                  </div>
+                  <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 mt-0.5">${item.label}</span>
+                ` : `
+                  <i data-lucide="${item.icon}" class="w-5 h-5 mb-0.5 text-slate-500 dark:text-slate-400"></i>
+                  <span class="text-[10px] font-semibold tracking-tight">${item.label}</span>
+                `}
+              </button>
+            `;
+          }
+
+          const isActive = currentRoute === item.id;
+          return `
+            <a href="#${item.id}" class="touch-press flex flex-col items-center justify-center py-1 px-2 rounded-xl transition min-w-[56px] ${
+              isActive 
+                ? 'text-emerald-600 dark:text-emerald-400 font-bold' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-emerald-600'
+            }">
+              ${item.isHero ? `
+                <div class="w-10 h-10 -mt-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-600/40 ring-4 ring-white dark:ring-slate-900 ${
+                  isActive ? 'ring-emerald-200 dark:ring-emerald-800' : ''
+                }">
+                  <i data-lucide="${item.icon}" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">${item.label}</span>
+              ` : `
+                <i data-lucide="${item.icon}" class="w-5 h-5 mb-0.5 ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}"></i>
+                <span class="text-[10px] ${isActive ? 'font-bold' : 'font-semibold'} tracking-tight">${item.label}</span>
+              `}
+            </a>
+          `;
+        }).join('')}
+      </nav>
+    `;
+  },
+
+  initListeners: function() {
+    // Re-trigger icon rendering
+    if (typeof lucide !== "undefined" && lucide.createIcons) {
+      lucide.createIcons();
     }
   }
 };
@@ -4121,6 +4220,7 @@ const App = {
       state.on("auth:change", () => {
         this.renderNavbar();
         this.renderSidebar();
+        this.renderBottomNav();
         this.handleRoute();
       });
 
@@ -4131,6 +4231,7 @@ const App = {
       // 4. Initial Render
       this.renderNavbar();
       this.renderSidebar();
+      this.renderBottomNav();
       this.handleRoute();
 
       // 5. If GAS Web App URL is saved, attempt background sync
@@ -4152,6 +4253,7 @@ const App = {
 
     state.activeRoute = route;
     this.renderSidebar();
+    this.renderBottomNav();
     this.renderView();
   },
 
@@ -4178,6 +4280,19 @@ const App = {
       }
     } catch (e) {
       console.warn("Sidebar render error:", e);
+    }
+  },
+
+  renderBottomNav: function() {
+    try {
+      const bottomEl = document.getElementById("bottomnav-container");
+      if (bottomEl && typeof BottomNavComponent !== "undefined") {
+        bottomEl.innerHTML = BottomNavComponent.render();
+        BottomNavComponent.initListeners();
+        this.reinitIcons();
+      }
+    } catch (e) {
+      console.warn("BottomNav render error:", e);
     }
   },
 

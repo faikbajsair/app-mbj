@@ -243,3 +243,58 @@ body {
   border-top: 1px double #000;
   margin: 6px 0;
 }
+
+/* ==============================================================================
+   MOBILE APP BAR & SAFE-AREA SUPPORT (ANDROID & iOS)
+   ============================================================================== */
+.mobile-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 45;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(226, 232, 240, 0.85);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 2px);
+  box-shadow: 0 -4px 25px -4px rgba(0, 0, 0, 0.08);
+}
+
+.dark .mobile-bottom-bar {
+  background: rgba(15, 23, 42, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 25px -4px rgba(0, 0, 0, 0.35);
+}
+
+/* Safe Area Insets Padding for Mobile Body Content */
+@media screen and (max-width: 1023px) {
+  #app-main-content {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem) !important;
+  }
+
+  /* Prevent auto-zoom on iOS when tapping inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Mobile Touch Press Feedback */
+.touch-press {
+  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.touch-press:active {
+  transform: scale(0.94);
+}
+
+/* Mobile Scrollbar Hide for Clean Carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
