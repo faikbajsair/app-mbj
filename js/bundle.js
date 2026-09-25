@@ -1,10 +1,6 @@
-/**
- * Masjid MBJ Management System - Unified Production Bundle
- * Generated: 2026-09-25T05:05:34.224Z
- */
+/* Masjid MBJ Management System Unified Script */
 
-
-/* === START FILE: js/config.js === */
+/* === js/config.js === */
 /**
  * ==============================================================================
  * CONFIG & WHITE-LABEL DEFAULTS
@@ -99,9 +95,8 @@ class ConfigManager {
 // Initial theme apply
 ConfigManager.applyTheme();
 
-/* === END FILE: js/config.js === */
 
-/* === START FILE: js/utils.js === */
+/* === js/utils.js === */
 /**
  * ==============================================================================
  * UTILITY HELPERS
@@ -376,9 +371,8 @@ _Layanan Bantuan: ${config.mosque_phone}_`;
   }
 };
 
-/* === END FILE: js/utils.js === */
 
-/* === START FILE: js/state.js === */
+/* === js/state.js === */
 /**
  * ==============================================================================
  * STATE MANAGEMENT & LOCAL DATA STORE
@@ -629,9 +623,8 @@ class StateStore {
 // Instantiate global singleton
 const state = new StateStore();
 
-/* === END FILE: js/state.js === */
 
-/* === START FILE: js/api.js === */
+/* === js/api.js === */
 /**
  * ==============================================================================
  * API SERVICE (GOOGLE APPS SCRIPT INTEGRATION)
@@ -757,9 +750,8 @@ class ApiService {
   }
 }
 
-/* === END FILE: js/api.js === */
 
-/* === START FILE: js/components/navbar.js === */
+/* === js/components/navbar.js === */
 /**
  * ==============================================================================
  * COMPONENT: NAVBAR (TOPBAR)
@@ -907,9 +899,8 @@ const NavbarComponent = {
   }
 };
 
-/* === END FILE: js/components/navbar.js === */
 
-/* === START FILE: js/components/sidebar.js === */
+/* === js/components/sidebar.js === */
 /**
  * ==============================================================================
  * COMPONENT: SIDEBAR
@@ -1047,9 +1038,8 @@ const SidebarComponent = {
   }
 };
 
-/* === END FILE: js/components/sidebar.js === */
 
-/* === START FILE: js/components/dashboard.js === */
+/* === js/components/dashboard.js === */
 /**
  * ==============================================================================
  * COMPONENT: DASHBOARD (EXECUTIVE OVERVIEW)
@@ -1436,9 +1426,8 @@ const DashboardComponent = {
   }
 };
 
-/* === END FILE: js/components/dashboard.js === */
 
-/* === START FILE: js/components/pos.js === */
+/* === js/components/pos.js === */
 /**
  * ==============================================================================
  * COMPONENT: SMART POS & FINANCIAL CASHIER
@@ -1800,9 +1789,8 @@ const PosComponent = {
   }
 };
 
-/* === END FILE: js/components/pos.js === */
 
-/* === START FILE: js/components/transactions.js === */
+/* === js/components/transactions.js === */
 /**
  * ==============================================================================
  * COMPONENT: TRANSACTIONS (BUKU KAS & JURNAL KEUANGAN)
@@ -2047,9 +2035,8 @@ const TransactionsComponent = {
   }
 };
 
-/* === END FILE: js/components/transactions.js === */
 
-/* === START FILE: js/components/ubudiyah.js === */
+/* === js/components/ubudiyah.js === */
 /**
  * ==============================================================================
  * COMPONENT: UBUDIYAH (AGENDA KAJIAN & KHOTIB JUMAT)
@@ -2279,9 +2266,8 @@ const UbudiyahComponent = {
   }
 };
 
-/* === END FILE: js/components/ubudiyah.js === */
 
-/* === START FILE: js/components/multimedia.js === */
+/* === js/components/multimedia.js === */
 /**
  * ==============================================================================
  * COMPONENT: MULTIMEDIA & ASSETS
@@ -2524,9 +2510,8 @@ const MultimediaComponent = {
   }
 };
 
-/* === END FILE: js/components/multimedia.js === */
 
-/* === START FILE: js/components/facilities.js === */
+/* === js/components/facilities.js === */
 /**
  * ==============================================================================
  * COMPONENT: FACILITIES & MARBOT (RUMAH TANGGA)
@@ -2787,9 +2772,8 @@ const FacilitiesComponent = {
   }
 };
 
-/* === END FILE: js/components/facilities.js === */
 
-/* === START FILE: js/components/social.js === */
+/* === js/components/social.js === */
 /**
  * ==============================================================================
  * COMPONENT: SOCIAL SERVICES (CSR MBJ)
@@ -3057,9 +3041,8 @@ const SocialComponent = {
   }
 };
 
-/* === END FILE: js/components/social.js === */
 
-/* === START FILE: js/components/tpq.js === */
+/* === js/components/tpq.js === */
 /**
  * ==============================================================================
  * COMPONENT: TPQ (PENDIDIKAN AL-QUR'AN)
@@ -3411,9 +3394,8 @@ _Alhamdulillah, iuran SPP santri telah kami terima. Semoga ananda senantiasa ist
   }
 };
 
-/* === END FILE: js/components/tpq.js === */
 
-/* === START FILE: js/components/portal.js === */
+/* === js/components/portal.js === */
 /**
  * ==============================================================================
  * COMPONENT: PUBLIC PORTAL (PORTAL JAMAAH MBJ)
@@ -3677,9 +3659,8 @@ const PortalComponent = {
   }
 };
 
-/* === END FILE: js/components/portal.js === */
 
-/* === START FILE: js/components/settings.js === */
+/* === js/components/settings.js === */
 /**
  * ==============================================================================
  * COMPONENT: SETTINGS (SAAS WHITE-LABEL CMS STUDIO)
@@ -3992,9 +3973,8 @@ const SettingsComponent = {
   }
 };
 
-/* === END FILE: js/components/settings.js === */
 
-/* === START FILE: js/app.js === */
+/* === js/app.js === */
 /**
  * ==============================================================================
  * APPLICATION BOOTSTRAP & MAIN ORCHESTRATOR
@@ -4345,4 +4325,3 @@ if (document.readyState === "loading") {
   App.init();
 }
 
-/* === END FILE: js/app.js === */
