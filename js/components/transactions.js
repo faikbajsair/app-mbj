@@ -26,11 +26,11 @@ const TransactionsComponent = {
     if (this.filter.search) {
       const q = this.filter.search.toLowerCase();
       list = list.filter(t => 
-        (t.trx_id && t.trx_id.toLowerCase().includes(q)) ||
-        (t.category && t.category.toLowerCase().includes(q)) ||
-        (t.sub_category && t.sub_category.toLowerCase().includes(q)) ||
-        (t.notes && t.notes.toLowerCase().includes(q)) ||
-        (t.pj_name && t.pj_name.toLowerCase().includes(q))
+        (t.trx_id && String(t.trx_id).toLowerCase().includes(q)) ||
+        (t.category && String(t.category).toLowerCase().includes(q)) ||
+        (t.sub_category && String(t.sub_category).toLowerCase().includes(q)) ||
+        (t.notes && String(t.notes).toLowerCase().includes(q)) ||
+        (t.pj_name && String(t.pj_name).toLowerCase().includes(q))
       );
     }
 

@@ -168,12 +168,21 @@ _Semoga Allah membalas dengan kebaikan yang berlipat ganda._
 _Layanan Bantuan: ${config.mosque_phone}_`;
   },
 
+  // Sanitize & Format Phone Number for WhatsApp (e.g. 0812... or 812... -> 62812...)
+  cleanPhone: function(phone) {
+    if (!phone) return "";
+    let clean = String(phone).replace(/[^0-9]/g, '');
+    if (clean.startsWith('0')) {
+      clean = '62' + clean.slice(1);
+    } else if (clean.startsWith('8')) {
+      clean = '62' + clean;
+    }
+    return clean;
+  },
+
   // Open Direct WhatsApp Link
   openWhatsAppReceipt: function(phone, receipt) {
-    let cleanPhone = (phone || "").toString().replace(/[^0-9]/g, '');
-    if (cleanPhone.startsWith('0')) {
-      cleanPhone = '62' + cleanPhone.slice(1);
-    }
+    const cleanPhone = this.cleanPhone(phone);
     const text = encodeURIComponent(this.generateWhatsAppKwitansiText(receipt));
     const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${text}` : `https://wa.me/?text=${text}`;
     window.open(url, '_blank');

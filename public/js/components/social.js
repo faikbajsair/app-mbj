@@ -149,7 +149,7 @@ const SocialComponent = {
                     <td class="py-3 px-4 text-center">
                       <div class="flex items-center justify-center gap-1">
                         ${item.phone && item.phone !== '-' ? `
-                          <a href="https://wa.me/${item.phone.replace(/[^0-9]/g, '')}" target="_blank" class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50" title="Hubungi Pemohon via WA">
+                          <a href="https://wa.me/${Utils.cleanPhone(item.phone)}" target="_blank" class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50" title="Hubungi Pemohon via WA">
                             <i data-lucide="message-circle" class="w-4 h-4"></i>
                           </a>
                         ` : ''}

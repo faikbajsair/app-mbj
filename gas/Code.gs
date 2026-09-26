@@ -494,6 +494,9 @@ function ModelFactory(sheetName) {
           if (val instanceof Date) {
             val = Utilities.formatDate(val, Session.getScriptTimeZone() || "GMT+7", "yyyy-MM-dd HH:mm:ss");
           }
+          if ((h === "parent_phone" || h === "phone" || h === "student_id" || h === "trx_id" || h === "agenda_id" || h === "ticket_id" || h === "service_id") && val !== null && val !== undefined && val !== "") {
+            val = String(val);
+          }
           obj[h] = val;
         });
         return obj;

@@ -86,10 +86,12 @@ const TpqComponent = {
                         <div class="text-[10px] font-mono text-slate-400">${s.student_id}</div>
                       </td>
                       <td class="py-3 px-4 text-slate-600 font-medium">
-                        <a href="https://wa.me/${(s.parent_phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="text-emerald-600 hover:underline inline-flex items-center gap-1">
-                          <i data-lucide="phone" class="w-3 h-3"></i>
-                          <span>${s.parent_phone}</span>
-                        </a>
+                        ${s.parent_phone ? `
+                          <a href="https://wa.me/${Utils.cleanPhone(s.parent_phone)}" target="_blank" class="text-emerald-600 hover:underline inline-flex items-center gap-1">
+                            <i data-lucide="phone" class="w-3 h-3"></i>
+                            <span>${s.parent_phone}</span>
+                          </a>
+                        ` : `<span class="text-slate-400 italic">-</span>`}
                       </td>
                       <td class="py-3 px-4 font-bold text-slate-800 dark:text-slate-200">
                         ${Utils.formatRupiah(s.monthly_fee)}
@@ -341,9 +343,7 @@ _Alhamdulillah, iuran SPP santri telah kami terima. Semoga ananda senantiasa ist
 *Status:* LUNAS & SAH TERCATAT`;
 
     const phone = student ? student.parent_phone : "";
-    let cleanPhone = (phone || "").replace(/[^0-9]/g, '');
-    if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.slice(1);
-
+    const cleanPhone = Utils.cleanPhone(phone);
     const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   }

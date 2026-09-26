@@ -267,12 +267,21 @@ _Semoga Allah membalas dengan kebaikan yang berlipat ganda._
 _Layanan Bantuan: ${config.mosque_phone}_`;
   },
 
+  // Sanitize & Format Phone Number for WhatsApp (e.g. 0812... or 812... -> 62812...)
+  cleanPhone: function(phone) {
+    if (!phone) return "";
+    let clean = String(phone).replace(/[^0-9]/g, '');
+    if (clean.startsWith('0')) {
+      clean = '62' + clean.slice(1);
+    } else if (clean.startsWith('8')) {
+      clean = '62' + clean;
+    }
+    return clean;
+  },
+
   // Open Direct WhatsApp Link
   openWhatsAppReceipt: function(phone, receipt) {
-    let cleanPhone = (phone || "").toString().replace(/[^0-9]/g, '');
-    if (cleanPhone.startsWith('0')) {
-      cleanPhone = '62' + cleanPhone.slice(1);
-    }
+    const cleanPhone = this.cleanPhone(phone);
     const text = encodeURIComponent(this.generateWhatsAppKwitansiText(receipt));
     const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${text}` : `https://wa.me/?text=${text}`;
     window.open(url, '_blank');
@@ -2040,11 +2049,11 @@ const TransactionsComponent = {
     if (this.filter.search) {
       const q = this.filter.search.toLowerCase();
       list = list.filter(t => 
-        (t.trx_id && t.trx_id.toLowerCase().includes(q)) ||
-        (t.category && t.category.toLowerCase().includes(q)) ||
-        (t.sub_category && t.sub_category.toLowerCase().includes(q)) ||
-        (t.notes && t.notes.toLowerCase().includes(q)) ||
-        (t.pj_name && t.pj_name.toLowerCase().includes(q))
+        (t.trx_id && String(t.trx_id).toLowerCase().includes(q)) ||
+        (t.category && String(t.category).toLowerCase().includes(q)) ||
+        (t.sub_category && String(t.sub_category).toLowerCase().includes(q)) ||
+        (t.notes && String(t.notes).toLowerCase().includes(q)) ||
+        (t.pj_name && String(t.pj_name).toLowerCase().includes(q))
       );
     }
 
@@ -3146,7 +3155,7 @@ const SocialComponent = {
                     <td class="py-3 px-4 text-center">
                       <div class="flex items-center justify-center gap-1">
                         ${item.phone && item.phone !== '-' ? `
-                          <a href="https://wa.me/${item.phone.replace(/[^0-9]/g, '')}" target="_blank" class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50" title="Hubungi Pemohon via WA">
+                          <a href="https://wa.me/${Utils.cleanPhone(item.phone)}" target="_blank" class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50" title="Hubungi Pemohon via WA">
                             <i data-lucide="message-circle" class="w-4 h-4"></i>
                           </a>
                         ` : ''}
@@ -3352,10 +3361,12 @@ const TpqComponent = {
                         <div class="text-[10px] font-mono text-slate-400">${s.student_id}</div>
                       </td>
                       <td class="py-3 px-4 text-slate-600 font-medium">
-                        <a href="https://wa.me/${(s.parent_phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="text-emerald-600 hover:underline inline-flex items-center gap-1">
-                          <i data-lucide="phone" class="w-3 h-3"></i>
-                          <span>${s.parent_phone}</span>
-                        </a>
+                        ${s.parent_phone ? `
+                          <a href="https://wa.me/${Utils.cleanPhone(s.parent_phone)}" target="_blank" class="text-emerald-600 hover:underline inline-flex items-center gap-1">
+                            <i data-lucide="phone" class="w-3 h-3"></i>
+                            <span>${s.parent_phone}</span>
+                          </a>
+                        ` : `<span class="text-slate-400 italic">-</span>`}
                       </td>
                       <td class="py-3 px-4 font-bold text-slate-800 dark:text-slate-200">
                         ${Utils.formatRupiah(s.monthly_fee)}
@@ -3607,9 +3618,7 @@ _Alhamdulillah, iuran SPP santri telah kami terima. Semoga ananda senantiasa ist
 *Status:* LUNAS & SAH TERCATAT`;
 
     const phone = student ? student.parent_phone : "";
-    let cleanPhone = (phone || "").replace(/[^0-9]/g, '');
-    if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.slice(1);
-
+    const cleanPhone = Utils.cleanPhone(phone);
     const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   }
@@ -3836,7 +3845,7 @@ const PortalComponent = {
               </div>
 
               <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-500 text-center">
-                Konfirmasi donasi & bukti transfer via WhatsApp: <a href="https://wa.me/${config.mosque_phone.replace(/[^0-9]/g, '')}" target="_blank" class="font-bold text-emerald-600 hover:underline">${config.mosque_phone}</a>
+                Konfirmasi donasi & bukti transfer via WhatsApp: <a href="https://wa.me/${Utils.cleanPhone(config.mosque_phone)}" target="_blank" class="font-bold text-emerald-600 hover:underline">${config.mosque_phone}</a>
               </div>
 
             </div>

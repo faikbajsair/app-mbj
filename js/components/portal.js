@@ -217,7 +217,7 @@ const PortalComponent = {
               </div>
 
               <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-500 text-center">
-                Konfirmasi donasi & bukti transfer via WhatsApp: <a href="https://wa.me/${config.mosque_phone.replace(/[^0-9]/g, '')}" target="_blank" class="font-bold text-emerald-600 hover:underline">${config.mosque_phone}</a>
+                Konfirmasi donasi & bukti transfer via WhatsApp: <a href="https://wa.me/${Utils.cleanPhone(config.mosque_phone)}" target="_blank" class="font-bold text-emerald-600 hover:underline">${config.mosque_phone}</a>
               </div>
 
             </div>
