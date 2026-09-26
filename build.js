@@ -125,7 +125,7 @@ const htmlTemplate = `<!DOCTYPE html>
   <footer id="app-footer" class="lg:pl-64 py-6 border-t border-slate-200/60 text-center text-xs text-slate-400 bg-white/40 backdrop-blur-sm transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
       <div>
-        <span class="font-bold text-slate-600">Sistem Manajemen Masjid Mu'adz bin Jabal (MBJ)</span> &copy; 2026 • SaaS-Ready DKM Engine
+        <span class="font-bold text-slate-600">Sistem Manajemen Masjid Mu'adz bin Jabal (MBJ)</span> &copy; 2026 • Development by Al-Imam EduTech
       </div>
       <div class="flex items-center gap-3 text-slate-500">
         <a href="#portal" class="hover:text-emerald-600">Portal Publik</a>
